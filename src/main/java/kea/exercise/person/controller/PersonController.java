@@ -38,4 +38,21 @@ public class PersonController {
     public Person createPerson(@RequestBody Person person){
         return personRepository.save(person);
     }
+
+    @PutMapping("/persons/{id}")
+    public ResponseEntity<Person> updatePerson(@PathVariable int id, @RequestBody Person person){
+        Optional<Person> original = personRepository.findById(id);
+        if (original.isPresent()) {
+            Person originalPerson = original.get();
+            // Opdater person
+            originalPerson.setFirstName(person.getFirstName());
+            originalPerson.setLastName(person.getLastName());
+            originalPerson.setDateOfBirth(person.getDateOfBirth());
+            // Gem og returner den opdaterede person
+            Person updatedPerson = personRepository.save(originalPerson);
+            return ResponseEntity.ok().body(updatedPerson);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -54,5 +55,12 @@ public class PersonController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @DeleteMapping("/persons/{id}")
+    public ResponseEntity<Person> deletePerson(@PathVariable int id) {
+        Optional<Person> person = personRepository.findById(id);
+        personRepository.deleteById(id);
+        return ResponseEntity.of(person);
     }
 }
